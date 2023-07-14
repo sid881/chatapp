@@ -14,21 +14,21 @@ app.use(express.static(__dirname))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
 
-var messages = [
-    {name: 'Tim', message: 'Hi'},
-    {name: 'Jane', message: 'Hello'}
-]
 
 app.get('/messages', (req, res) =>{
-    res.send(messages)
+    Message.find({},(err,messages)=>{
+        res.send(messages)
+    })
+    
 })
 
-app.post('/messages', (req, res) =>{
+app.post('/messages',(req, res) =>{
+
     var message=new Message(req.body)
     message.save((err)=>{
         if(err)
         sendStatus(500)
-        messages.push(req.body)
+        
         io.emit('message',req.body)
         res.sendStatus(200)
     })
