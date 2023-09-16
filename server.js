@@ -4,7 +4,7 @@ var app = express()
 var  http =require('http').Server(app)
 var io=require('socket.io')(http)
 var mongoose =require('mongoose')
-var dburl='mongodb+srv://user:user@cluster1.cef9n5a.mongodb.net/?retryWrites=true&w=majority'
+var dburl='mongodb+srv://user:user@cluster0.5llirqc.mongodb.net/?retryWrites=true&w=majority'
  var Message=mongoose.model('Message',{
     name:String,
     message:String
@@ -19,6 +19,7 @@ app.get('/messages', (req, res) =>{
     Message.find({},(err,messages)=>{
         res.send(messages)
     })
+
     
 })
 
