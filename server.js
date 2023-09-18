@@ -1,6 +1,8 @@
 var express = require('express')
 var bodyParser = require('body-parser')
 var app = express()
+const multer  = require('multer')
+
 var  http =require('http').Server(app)
 var io=require('socket.io')(http)
 var mongoose =require('mongoose')
@@ -22,6 +24,33 @@ app.get('/messages', (req, res) =>{
 
     
 })
+
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, './uploads')
+    },
+    filename: function (req, file, cb) {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+      cb(null, file.fieldname + '-' + uniqueSuffix)
+    }
+  })
+  const upload = multer({ storage: storage })
+
+  
+  
+  app.post('/upload',upload.single("profile image"),(req,res)=>{
+    console.log(req.body);
+    console.log(req.file);
+});
+app.post('/stats', upload.single('uploaded_file'), function (req, res) {
+   // req.file is the name of your file in the form above, here 'uploaded_file'
+   // req.body will hold the text fields, if there were any 
+   console.log(req.file, req.body)
+});
+ 
+
+
 
 app.post('/messages',(req, res) =>{
 
